@@ -11,6 +11,10 @@ public class Vector2D {
         this.y = y;
     }
 
+    public Vector2D(int x_max, int y_max, boolean random) {
+        this((int) Math.floor(Math.random() * x_max), (int) Math.floor(Math.random() * y_max));
+    }
+
     public String toString() {
         return "(" + this.x + ", " + this.y + ")";
     }
