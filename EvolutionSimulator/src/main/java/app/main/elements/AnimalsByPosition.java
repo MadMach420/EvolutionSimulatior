@@ -1,7 +1,8 @@
 package app.main.elements;
 
 import app.main.Vector2D;
-import app.main.observers.AnimalDeathObserver;
+
+import app.main.maps.AbstractMap;
 import app.main.observers.PositionChangeObserver;
 
 import java.util.HashMap;
@@ -23,8 +24,40 @@ public class AnimalsByPosition implements PositionChangeObserver {
         animalCount--;
     }
 
-    public TreeSet<Animal> getAnimalsAtPosition(Vector2D position) {
-        return animalsByPosition.get(position);
+    public Animal getBestAnimalAtPosition(Vector2D position) {
+        if (animalsByPosition.get(position) != null) {
+            return animalsByPosition.get(position).last();
+        } else return null;
+    }
+
+    public void checkAnimalDeath() {
+        animalsByPosition.forEach((position, set) -> set.forEach(Animal::checkDeath));
+    }
+
+    public void moveAnimals() {
+        animalsByPosition.forEach((position, set) -> set.forEach(Animal::move));
+    }
+
+    public void breedAnimals(int energyToBreed, AbstractMap map) {
+        animalsByPosition.forEach((position, set) -> {
+            if (set.size() >= 2) {
+                Animal first = set.last();
+                Animal second = set.lower(first);
+                if (second.energy >= energyToBreed) {
+                    map.addAnimal(first.breed(second));
+                }
+            }
+        });
+    }
+
+    public boolean eatGrassAtPosition(Vector2D position, int energyGain) {
+        TreeSet<Animal> animals = animalsByPosition.get(position);
+        if (animals != null) {
+            animals.last().eat(energyGain);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

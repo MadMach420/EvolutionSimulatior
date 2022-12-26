@@ -15,14 +15,20 @@ public abstract class AbstractMap implements AnimalDeathObserver {
     public HashSet<Vector2D> grassSet = new HashSet<>();
     public AnimalsByPosition animals = new AnimalsByPosition();
 
-    public void spawnGrass() {
-        boolean grassSpawned = false;
+    private void spawnGrass() {
+        boolean grassSpawned;
         if (Math.random() < 0.8) {
             grassSpawned = spawnGrassPreferred();
             if (!grassSpawned) spawnGrassNonPreferred();
         } else {
             grassSpawned = spawnGrassNonPreferred();
             if (!grassSpawned) spawnGrassPreferred();
+        }
+    }
+
+    public void spawnMultipleGrass(int n) {
+        for (int i = 0; i < n; i++) {
+            this.spawnGrass();
         }
     }
 
@@ -34,6 +40,30 @@ public abstract class AbstractMap implements AnimalDeathObserver {
     public void removeAnimal(Animal animal) {
         animal.removeObserver(this);
         animals.removeAnimal(animal);
+    }
+
+    public void checkAnimalDeath() {
+        animals.checkAnimalDeath();
+    }
+
+    public void moveAnimals() {
+        animals.moveAnimals();
+    }
+
+    public void eatGrass(int energyGain) {
+        grassSet.removeIf(position -> animals.eatGrassAtPosition(position, energyGain));
+    }
+
+    public void breedAnimals(int energyToBreed) {
+        animals.breedAnimals(energyToBreed, this);
+    }
+
+    public Animal animalAt(Vector2D position) {
+        return animals.getBestAnimalAtPosition(position);
+    }
+
+    public boolean grassAt(Vector2D position) {
+        return grassSet.contains(position);
     }
 
     protected abstract boolean spawnGrassPreferred();

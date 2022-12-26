@@ -28,11 +28,6 @@ public class Animal implements Comparable<Animal>{
         this.energyLoss = energyLoss;
     }
 
-    public Animal(Vector2D position, AbstractMap map, int energy, int energyLoss, int genomeLength) {
-        this(position, map, energy, energyLoss);
-        this.genome = new Genome(genomeLength);
-    }
-
     public Animal(Vector2D position, AbstractMap map, int energy, int energyLoss, Genome genome) {
         this(position, map, energy, energyLoss);
         this.genome = genome;
@@ -69,16 +64,37 @@ public class Animal implements Comparable<Animal>{
 
     public void checkDeath() {
         if (this.energy <= 0) {
-            // TODO
-            //  ŚMIERĆ
+            this.death();
         }
     }
 
     public Animal breed(Animal other) {
-        // TODO
-        //  Genom: podział na 2, stworzenie;
-        //  odjęcie energii rodzicom, skopiowanie parametrów dla dziecka;
-        //  return new Animal(genom i parametry);
+        this.energy -= energyLoss;
+        other.energy -= energyLoss;
+        boolean startFromLeft = Math.random() < 0.5;
+        int[] newGenomeArray = new int[this.genome.getLength()];
+        for (int i = 0; i < newGenomeArray.length; i++) {
+            if (startFromLeft) {
+                if (i < newGenomeArray.length * (this.energy / (this.energy + other.energy))) {
+                    newGenomeArray[i] = this.genome.getGeneAtIndex(i);
+                } else {
+                    newGenomeArray[i] = other.genome.getGeneAtIndex(i);
+                }
+            } else {
+                if (i < newGenomeArray.length * (other.energy / (this.energy + other.energy))) {
+                    newGenomeArray[i] = other.genome.getGeneAtIndex(i);
+                } else {
+                    newGenomeArray[i] = this.genome.getGeneAtIndex(i);
+                }
+            }
+        }
+        Genome newGenome = new Genome(newGenomeArray, this.genome.randomMutation, this.genome.jumpToRandomGene, this.genome.minMutations, this.genome.maxMutations);
+
+        return new Animal(this.getPosition(), this.map, 2 * energyLoss, energyLoss, newGenome);
+    }
+
+    public void eat(int energyGain) {
+        this.energy += energyGain;
     }
 
     public void addObserver(Object observer) {
