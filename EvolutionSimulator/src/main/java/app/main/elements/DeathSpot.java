@@ -15,10 +15,6 @@ public class DeathSpot implements Comparable<DeathSpot> {
     public int compareTo(DeathSpot o) {
         if (this.deathCount - o.deathCount != 0) {
             return this.deathCount - o.deathCount;
-        } else if (this.spot.x - o.spot.x != 0) {
-            return this.spot.x - o.spot.x;
-        } else if (this.spot.y - o.spot.y != 0) {
-            return this.spot.y - o.spot.y;
-        } else return 0;
+        } else return Math.random() < 0.5 ? -1 : 1; // losowa kolejność w przypadku braku trupów
     }
 }

@@ -5,13 +5,16 @@ import app.main.maps.AbstractMap;
 import app.main.maps.EquatorMap;
 import app.main.maps.MapType;
 import app.main.maps.ToxicMap;
+import app.main.observers.EngineObserver;
+
+import java.util.LinkedList;
 
 public class Engine implements Runnable {
 
     public AbstractMap map;
     private final int grassGrowth;
     private final int energyFromGrass;
-    private final int minEnergyToBreed;
+    public final int minEnergyToBreed;
     private final int startingEnergy;
     private final int energyLoss;
     private final int genomeLength;
@@ -19,6 +22,7 @@ public class Engine implements Runnable {
     private final int maxMutations;
     private final boolean randomMutation;
     private final boolean jumpToRandomGene;
+    private final LinkedList<EngineObserver> observerList = new LinkedList<>();
 
     public Engine(int mapWidth, int mapHeight, int grassCount, int animalCount, boolean wrapEdges,  MapType variant,
                   int grassGrowth, int energyFromGrass, int minEnergyToBreed, int startingEnergy, int energyLoss,
@@ -55,10 +59,25 @@ public class Engine implements Runnable {
 
     @Override
     public void run() {
-        this.map.checkAnimalDeath();
-        this.map.moveAnimals();
-        this.map.eatGrass(energyFromGrass);
-        this.map.breedAnimals(minEnergyToBreed);
-        this.map.spawnMultipleGrass(grassGrowth);
+        while (true) {
+            this.map.checkAnimalDeath();
+            this.map.moveAnimals();
+            this.map.eatGrass(energyFromGrass);
+            this.map.breedAnimals(minEnergyToBreed);
+            this.map.spawnMultipleGrass(grassGrowth);
+            notifyObservers();
+        }
+    }
+
+    public void addObserver(EngineObserver observer) {
+        observerList.add(observer);
+    }
+
+    public void removeObserver(EngineObserver observer) {
+        observerList.remove(observer);
+    }
+
+    public void notifyObservers() {
+        observerList.forEach(EngineObserver::engineStep);
     }
 }

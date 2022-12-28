@@ -1,0 +1,16 @@
+mapWidth,50
+mapHeight,40
+grassCount,50
+animalCount,75
+wrapEdges,false
+variant,toxic
+grassGrowth,35
+energyFromGrass,4
+minEnergyToBreed,5
+startingEnergy,20
+energyLoss,3
+genomeLength,16
+minMutations,0
+maxMutations,6
+randomMutation,false
+jumpToRandomGene,true

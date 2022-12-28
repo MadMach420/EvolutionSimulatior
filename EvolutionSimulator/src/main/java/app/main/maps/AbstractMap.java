@@ -66,6 +66,18 @@ public abstract class AbstractMap implements AnimalDeathObserver {
         return grassSet.contains(position);
     }
 
+    public int getNumberOfFreeSpaces() {
+        int freeSpaces = 0;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (!grassAt(new Vector2D(i, j)) && animalAt(new Vector2D(i, j)) == null) {
+                    freeSpaces++;
+                }
+            }
+        }
+        return freeSpaces;
+    }
+
     protected abstract boolean spawnGrassPreferred();
 
     protected abstract boolean spawnGrassNonPreferred();

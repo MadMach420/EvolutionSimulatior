@@ -1,0 +1,16 @@
+mapWidth,30
+mapHeight,20
+grassCount,15
+animalCount,10
+wrapEdges,true
+variant,equator
+grassGrowth,5
+energyFromGrass,5
+minEnergyToBreed,8
+startingEnergy,15
+energyLoss,4
+genomeLength,12
+minMutations,2
+maxMutations,5
+randomMutation,false
+jumpToRandomGene,false

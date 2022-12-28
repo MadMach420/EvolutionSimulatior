@@ -34,6 +34,8 @@ public class Animal implements Comparable<Animal>{
     }
 
     public void move() {
+        energy--;
+        age++;
         this.rotate(this.genome.getGene());
         Vector2D oldPosition = this.getPosition();
         Vector2D newPosition = this.position.add(this.direction.toVector());
@@ -62,15 +64,15 @@ public class Animal implements Comparable<Animal>{
         return position;
     }
 
-    public void checkDeath() {
-        if (this.energy <= 0) {
-            this.death();
-        }
+    public boolean checkDeath() {
+        return this.energy <= 0;
     }
 
     public Animal breed(Animal other) {
         this.energy -= energyLoss;
         other.energy -= energyLoss;
+        this.children++;
+        other.children++;
         boolean startFromLeft = Math.random() < 0.5;
         int[] newGenomeArray = new int[this.genome.getLength()];
         for (int i = 0; i < newGenomeArray.length; i++) {
@@ -121,7 +123,7 @@ public class Animal implements Comparable<Animal>{
         });
     }
 
-    private void death() {
+    public void death() {
         deathObservers.forEach(elem -> {
             elem.deathOfAnimal(this);
         });

@@ -39,7 +39,7 @@ public class ToxicMap extends AbstractMap {
         int cutoff = (int) Math.floor(0.2 * deathSpots.size());
         int i = 0;
         Iterator<DeathSpot> iterator = deathSpots.iterator();
-        while (i < cutoff) {
+        while (i <= cutoff) {
             DeathSpot currDeathSpot = iterator.next();
             if (!grassSet.contains(currDeathSpot.spot)) {
                 spots.add(currDeathSpot.spot);
@@ -59,13 +59,11 @@ public class ToxicMap extends AbstractMap {
     protected boolean spawnGrassNonPreferred() {
         LinkedList<Vector2D> spots = new LinkedList<>();
         int cutoff = (int) Math.floor(0.2 * deathSpots.size());
-        int i = cutoff;
-        Iterator<DeathSpot> iterator = deathSpots.iterator();
-        while (iterator.hasNext()) {
-            if (i >= cutoff) {
-                DeathSpot currDeathSpot = iterator.next();
-                if (!grassSet.contains(currDeathSpot.spot)) {
-                    spots.add(currDeathSpot.spot);
+        int i = 0;
+        for (DeathSpot deathSpot : deathSpots) {
+            if (i > cutoff) {
+                if (!grassSet.contains(deathSpot.spot)) {
+                    spots.add(deathSpot.spot);
                 }
             }
             i++;
