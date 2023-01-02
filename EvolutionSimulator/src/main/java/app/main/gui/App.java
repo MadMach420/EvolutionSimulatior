@@ -24,6 +24,7 @@ import java.util.LinkedList;
 public class App extends Application implements EngineObserver {
     Engine engine;
     DrawElements draw;
+    Stage stage;
     int delay = 500;
     boolean running = false;
     HBox hBox;
@@ -32,8 +33,9 @@ public class App extends Application implements EngineObserver {
     public void start(Stage primaryStage) throws Exception {
         hBox = new HBox();
         Scene scene = new Scene(hBox);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        stage = primaryStage;
+        stage.setScene(scene);
+        stage.show();
         drawInitialControls();
     }
 
@@ -63,6 +65,7 @@ public class App extends Application implements EngineObserver {
         });
         vBox.getChildren().addAll(label, button1, button2, button3);
         hBox.getChildren().add(0, vBox);
+
     }
 
     public void drawForm() {
@@ -128,6 +131,7 @@ public class App extends Application implements EngineObserver {
         });
         vBox.getChildren().add(button);
         hBox.getChildren().add(0, vBox);
+        stage.sizeToScene();
     }
 
     public void initializeEngineFromFile(String path) {
@@ -154,6 +158,7 @@ public class App extends Application implements EngineObserver {
         hBox.getChildren().clear();
         hBox.getChildren().add(draw.drawMap());
         hBox.getChildren().add(draw.drawStatistics());
+        stage.sizeToScene();
     }
 
     @Override
